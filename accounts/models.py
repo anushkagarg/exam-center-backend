@@ -36,6 +36,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     USER_CHOICES = (('O', 'Organization'), ('T', 'Staff'), ('S', 'Student'))
+    organization = models.ForeignKey('User', on_delete=models.CASCADE, 
+                    limit_choices_to={'user_type': 'O'}, null=True, blank=True, related_name='students_and_staffs')
     username = models.CharField(max_length=20, unique=True, primary_key=True)
     email = models.EmailField(
         verbose_name='Email Address', max_length=255, unique=True)
@@ -73,4 +75,12 @@ class User(AbstractBaseUser):
         if self.user_type == 'T':
             return self.staff_profile
         return self.student_profile
+
+    @property
+    def staffs(self):
+        return self.students_and_staffs.filter(user_type='T')
+
+    @property
+    def students(self):
+        return self.students_and_staffs.filter(user_type='S')
 

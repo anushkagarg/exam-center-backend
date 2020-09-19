@@ -6,7 +6,6 @@ User = get_user_model()
 
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="student_profile", limit_choices_to={'user_type': 'S'})
-    organization = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students', limit_choices_to={'user_type': 'O'})
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
 
@@ -17,7 +16,6 @@ class StudentProfile(models.Model):
 
 class StaffProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="staff_profile", limit_choices_to={'user_type': 'T'})
-    organization = models.ForeignKey(User, on_delete=models.CASCADE, related_name='staffs', limit_choices_to={'user_type': 'O'})
     first_name = models.CharField(max_length=40)
     last_name = models.CharField(max_length=40)
 

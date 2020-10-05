@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import CreateAPIView
 from .serializers import UserSerializer
 from accounts.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -13,11 +14,7 @@ class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
-
-    def get_permissions(self, *args, **kwargs):
-        if self.action == 'create':
-            return [AllowAny()]
-        return super(UserViewSet, self).get_permissions(*args, **kwargs)
+    http_method_names = ['get', 'head', 'put', 'patch', 'head']
 
     def get_serializer_class(self):
         return super(UserViewSet, self).get_serializer_class()
@@ -29,3 +26,8 @@ class UserViewSet(ModelViewSet):
             return self.request.user
 
         return super(UserViewSet, self).get_object()
+
+
+class CreateOrganizationView(CreateAPIView):
+    serializer_class=UserSerializer
+    permission_classes=[AllowAny]
